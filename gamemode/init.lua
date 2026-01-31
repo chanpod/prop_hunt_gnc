@@ -1386,16 +1386,41 @@ hook.Add("PlayerButtonDown", "PlayerButton_ControlTaunts", function(pl, key)
 			
 			-- Spawn or Remove Decoy
 			if (key == decoyKey) then
-				-- Check if looking at own decoy to remove it
-				local tr = util.TraceLine({
-					start = pl:EyePos(),
-					endpos = pl:EyePos() + pl:EyeAngles():Forward() * 200,
-					filter = pl
-				})
-				if tr.Hit and IsValid(tr.Entity) and tr.Entity:GetClass() == "ph_fake_prop" and tr.Entity:GetOwner() == pl then
-					pl:RemoveDecoyByEntity(tr.Entity)
+				-- Check if aiming at own decoy to remove it
+				local aimDir = pl:EyeAngles():Forward()
+				local eyePos = pl:EyePos()
+				local targetDecoy = nil
+				local bestScore = 0
+
+				if pl.propdecoys then
+					for _, decoy in ipairs(pl.propdecoys) do
+						if IsValid(decoy) then
+							local toDecoy = (decoy:GetPos() - eyePos):GetNormalized()
+							local dot = aimDir:Dot(toDecoy)
+							local dist = decoy:GetPos():Distance(eyePos)
+
+							local requiredDot
+							if dist < 50 then
+								requiredDot = 0.940 -- ~20°
+							elseif dist < 150 then
+								requiredDot = 0.985 -- ~10°
+							elseif dist < 250 then
+								requiredDot = 0.996 -- ~5°
+							else
+								requiredDot = 0.999 -- ~3°
+							end
+
+							if dot > requiredDot and dot > bestScore then
+								bestScore = dot
+								targetDecoy = decoy
+							end
+						end
+					end
+				end
+
+				if targetDecoy then
+					pl:RemoveDecoyByEntity(targetDecoy)
 				else
-					-- Place new decoy if under cap
 					pl:PlaceDecoyProp()
 				end
 			end

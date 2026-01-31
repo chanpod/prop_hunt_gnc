@@ -146,6 +146,8 @@ if SERVER then
                                 break
                             end
                         end
+                        -- Update networked decoy count for HUD
+                        owner:SetNWInt("DecoyCount", #owner.propdecoys)
                     end
                     owner.propdecoy = nil
                     owner:PHXChatInfo( "GOOD", "DECOY_FRAGS_RECEIVED", attacker:Nick() )

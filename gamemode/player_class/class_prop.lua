@@ -41,9 +41,11 @@ function CLASS:OnSpawn(pl)
 
 	-- Initialize multi-decoy system (max 15 decoys)
 	pl.propdecoys = {}
+	pl:SetNWInt("DecoyCount", 0)
 
 	-- Reset smoke availability
 	pl.ph_smoke_used = false
+	pl:SetNWBool("SmokeUsed", false)
 
 	-- Do not allow Pitch Rotation until the prop is changing to a new prop.
 	pl:EnablePropPitchRot( false )

@@ -323,3 +323,64 @@ hook.Add("HUDPaint", "PHX.MainHUD", function()
 		end
 	end
 end)
+
+-- Prop Abilities Keybind HUD (bottom right)
+hook.Add("HUDPaint", "PHX.PropAbilitiesHUD", function()
+	local ply = LocalPlayer()
+	if not IsValid(ply) or not ply:Alive() or ply:Team() ~= TEAM_PROPS then return end
+
+	local padding = 10
+	local lineHeight = 22
+	local boxWidth = 160
+	local lines = {}
+
+	-- Decoy info
+	if PHX:GetCVar("ph_enable_decoy_reward") then
+		local decoyCount = ply:GetNWInt("DecoyCount", 0)
+		local remaining = 15 - decoyCount
+		local decoyKey = input.GetKeyName(ply:GetInfoNum("ph_cl_decoy_spawn_key", KEY_1)) or "1"
+		table.insert(lines, {
+			key = decoyKey:upper(),
+			label = "Decoy",
+			status = remaining .. " left",
+			available = remaining > 0
+		})
+	end
+
+	-- Smoke info
+	if PHX:GetCVar("ph_exp_smoke_enabled") then
+		local smokeUsed = ply:GetNWBool("SmokeUsed", false)
+		local smokeKey = input.GetKeyName(ply:GetInfoNum("ph_cl_smoke_key", KEY_2)) or "2"
+		table.insert(lines, {
+			key = smokeKey:upper(),
+			label = "Smoke",
+			status = smokeUsed and "Used" or "Ready",
+			available = not smokeUsed
+		})
+	end
+
+	if #lines == 0 then return end
+
+	local boxHeight = (#lines * lineHeight) + (padding * 2)
+	local boxX = ScrW() - boxWidth - 20
+	local boxY = ScrH() - boxHeight - 100
+
+	-- Draw background
+	draw.RoundedBox(6, boxX, boxY, boxWidth, boxHeight, Color(20, 20, 20, 180))
+
+	-- Draw each line
+	for i, line in ipairs(lines) do
+		local y = boxY + padding + ((i - 1) * lineHeight)
+		local statusColor = line.available and Color(100, 255, 100) or Color(150, 150, 150)
+
+		-- Key badge
+		draw.RoundedBox(4, boxX + padding, y, 24, 18, Color(60, 60, 60, 255))
+		draw.SimpleText(line.key, "DermaDefaultBold", boxX + padding + 12, y + 9, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+
+		-- Label
+		draw.SimpleText(line.label, "DermaDefault", boxX + padding + 32, y + 9, Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+
+		-- Status
+		draw.SimpleText(line.status, "DermaDefault", boxX + boxWidth - padding, y + 9, statusColor, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+	end
+end)

@@ -761,6 +761,10 @@ L["PHXM_ADMIN_PROXIMITY_ENABLED"]		= "[Experimental] Auto-play panic sound when 
 L["PHXM_ADMIN_PROXIMITY_DISTANCE"]		= "Trigger distance in units (~160 = 10ft, ~250 = 15ft)"
 L["PHXM_ADMIN_PROXIMITY_COOLDOWN"]		= "Cooldown between panic taunts (seconds)"
 
+L["PHXM_ADMIN_SMOKE_TITLE"]				= "Smoke Screen Settings"
+L["PHXM_ADMIN_SMOKE_ENABLED"]			= "[Experimental] Allow props to deploy a smoke screen (once per life, key: 2)"
+L["PHXM_ADMIN_SMOKE_DURATION"]			= "Smoke duration (seconds)"
+
 L["PHXM_ADMIN_FALLDMG"]			= "Enable Fall Damage (Applies on All Teams)"
 L["PHXM_ADMIN_FALLDMG_REAL"]		= "Enable 'Realistic' Fall Damage"
 L["PHXM_INFORM_TO_JOIN"]			= "Inform Unassigned/Spectators with static text advice to join the game."

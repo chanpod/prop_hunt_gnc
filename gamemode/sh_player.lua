@@ -348,6 +348,9 @@ if SERVER then
 				-- Keep backwards compat reference to last placed decoy
 				self.propdecoy = newdecoy
 
+				-- Update networked decoy count for HUD
+				self:SetNWInt("DecoyCount", self:GetDecoyCount())
+
 				timer.Simple(0, function()
 					self:SendSurfaceSound('buttons/lever4.wav')
 				end)
@@ -374,6 +377,8 @@ if SERVER then
 		if IsValid(decoy) then
 			decoy:Remove()
 		end
+		-- Update networked decoy count for HUD
+		self:SetNWInt("DecoyCount", self:GetDecoyCount())
 		self:PHXChatInfo( "PRIMARY", "Decoy removed." )
 	end
 
@@ -394,6 +399,7 @@ if SERVER then
 
 		-- Mark smoke as used
 		self.ph_smoke_used = true
+		self:SetNWBool("SmokeUsed", true)
 
 		-- Get smoke duration from ConVar
 		local duration = PHX:GetCVar("ph_exp_smoke_duration") or 5
