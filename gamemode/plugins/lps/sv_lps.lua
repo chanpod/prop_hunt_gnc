@@ -55,9 +55,8 @@ function PHX.LPS:AddSound( tblKey, Directory )
             t.filename  = filename  -- maybe unused, but just in case if you need it.
             t.ext       = files[i]  -- maybe unused, but just in case if you need it.
             table.insert(self.SOUND[tblKey], t)
-            
-            -- Add to Resources, if any.
-            resource.AddFile("sound/lps/"..Directory.."/"..filename)
+
+            -- GNC: Removed resource.AddFile - Workshop handles distribution
         end
     end
 

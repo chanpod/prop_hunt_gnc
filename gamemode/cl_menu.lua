@@ -676,7 +676,8 @@ function PHX.UI.BaseMainMenu(ply, cmd, args)
 		PHX.UI:CreateVGUIType("", "label", "PHX.MenuCategoryLabel", grid, "PHXM_DECOY_SETTINGS")
 		PHX.UI:CreateVGUIType("ph_enable_decoy_reward", "check", "SERVER", grid, "PHXM_DECOY_ENABLE")
 		PHX.UI:CreateVGUIType("ph_decoy_health", "slider", {min = 1, max = 200, init = "DEF_CONVAR", dec = 0, kind = "SERVER"}, grid, "PHXM_DECOY_HEALTH")
-		
+		PHX.UI:CreateVGUIType("ph_decoy_max_count", "slider", {min = 1, max = 15, init = GetConVar("ph_decoy_max_count"):GetInt(), dec = 0, kind = "SERVER"}, grid, "PHXM_DECOY_MAX_COUNT")
+
 		PHX.UI:CreateVGUIType("","spacer",nil,grid,"" )
 		PHX.UI:CreateVGUIType("", "label", "PHX.MenuCategoryLabel", grid, "PHXM_GENERAL_SETTINGS")
         
@@ -837,6 +838,14 @@ function PHX.UI.BaseMainMenu(ply, cmd, args)
 		PHX.UI:CreateVGUIType("", "label", "PHX.MenuCategoryLabel", grid, "PHXM_ADMIN_SMOKE_TITLE")
 		PHX.UI:CreateVGUIType("ph_exp_smoke_enabled", "check", "SERVER", grid, "PHXM_ADMIN_SMOKE_ENABLED")
 		PHX.UI:CreateVGUIType("ph_exp_smoke_duration", "slider", {min = 1, max = 15, init = GetConVar("ph_exp_smoke_duration"):GetInt(), dec = 0, kind = "SERVER"}, grid, "PHXM_ADMIN_SMOKE_DURATION")
+		PHX.UI:CreateVGUIType("ph_exp_smoke_count", "slider", {min = 1, max = 5, init = GetConVar("ph_exp_smoke_count"):GetInt(), dec = 0, kind = "SERVER"}, grid, "PHXM_ADMIN_SMOKE_COUNT")
+
+		PHX.UI:CreateVGUIType("","spacer",nil,grid,"" )
+		PHX.UI:CreateVGUIType("", "label", "PHX.MenuCategoryLabel", grid, "PHXM_ADMIN_FLASHBANG_TITLE")
+		PHX.UI:CreateVGUIType("ph_exp_flashbang_enabled", "check", "SERVER", grid, "PHXM_ADMIN_FLASHBANG_ENABLED")
+		PHX.UI:CreateVGUIType("ph_exp_flashbang_count", "slider", {min = 1, max = 5, init = GetConVar("ph_exp_flashbang_count"):GetInt(), dec = 0, kind = "SERVER"}, grid, "PHXM_ADMIN_FLASHBANG_COUNT")
+		PHX.UI:CreateVGUIType("ph_exp_flashbang_stun_duration", "slider", {min = 1, max = 10, init = GetConVar("ph_exp_flashbang_stun_duration"):GetInt(), dec = 0, kind = "SERVER"}, grid, "PHXM_ADMIN_FLASHBANG_STUN")
+		PHX.UI:CreateVGUIType("ph_exp_flashbang_radius", "slider", {min = 100, max = 500, init = GetConVar("ph_exp_flashbang_radius"):GetInt(), dec = 0, kind = "SERVER"}, grid, "PHXM_ADMIN_FLASHBANG_RADIUS")
 
 		PHX.UI:CreateVGUIType("","spacer",nil,grid,"" )
 		

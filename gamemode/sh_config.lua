@@ -383,12 +383,9 @@ PHX.CachedTaunts[TEAM_PROPS]	= {}
 local AddResources
 if SERVER then
 	function AddResources(t)
+		-- GNC: Disabled resource.AddFile - Workshop handles distribution now
+		-- This prevents slow Source engine file transfers
 		if !t then return end
-		
-		for name,path in pairs(t) do
-			PHX:VerboseMsg("[Taunts] Adding resource for download: " .. name)
-			resource.AddFile("sound/" .. path)
-		end
 	end
 	
 	function PHX:GetRandomTaunt( idTeam )
@@ -547,9 +544,7 @@ function PHX:AddSingleTaunt(idTeam, category, name, path)
 		
 		self.TAUNTS[category][idTeam][name]	= path
 		self.CachedTaunts[idTeam][name] 	= path
-		if SERVER then
-			resource.AddFile("sound/"..path)
-		end
+		-- GNC: Removed resource.AddFile - Workshop handles distribution
 	end
 end
 

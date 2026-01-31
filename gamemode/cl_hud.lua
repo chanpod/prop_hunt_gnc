@@ -349,13 +349,25 @@ hook.Add("HUDPaint", "PHX.PropAbilitiesHUD", function()
 
 	-- Smoke info
 	if PHX:GetCVar("ph_exp_smoke_enabled") then
-		local smokeUsed = ply:GetNWBool("SmokeUsed", false)
+		local smokeCount = ply:GetNWInt("SmokeCount", 0)
 		local smokeKey = input.GetKeyName(ply:GetInfoNum("ph_cl_smoke_key", KEY_2)) or "2"
 		table.insert(lines, {
 			key = smokeKey:upper(),
 			label = "Smoke",
-			status = smokeUsed and "Used" or "Ready",
-			available = not smokeUsed
+			status = smokeCount > 0 and (smokeCount .. " left") or "Empty",
+			available = smokeCount > 0
+		})
+	end
+
+	-- Flashbang info
+	if PHX:GetCVar("ph_exp_flashbang_enabled") then
+		local flashCount = ply:GetNWInt("FlashbangCount", 0)
+		local flashKey = input.GetKeyName(ply:GetInfoNum("ph_cl_flashbang_key", KEY_3)) or "3"
+		table.insert(lines, {
+			key = flashKey:upper(),
+			label = "Flash",
+			status = flashCount > 0 and (flashCount .. " left") or "Empty",
+			available = flashCount > 0
 		})
 	end
 

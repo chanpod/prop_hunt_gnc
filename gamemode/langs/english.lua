@@ -635,6 +635,7 @@ L["DECOY_INDICATOR_TOOFAR"]          = "Range too far!"
 L["DECOY_INDICATOR_OK"]              = "Place Decoy [Press %s]"
 
 L["PHXM_DECOY_HEALTH"]				= "How much health does the decoy should have. Default is 10."
+L["PHXM_DECOY_MAX_COUNT"]			= "Maximum decoys a prop can place per life"
 L["PHXM_PLAYER_SHOW_DECOY_HELPER"]   = "Show/Hide Decoy placement helper? This will show a white dot with a text near on your crosshair."
 L["PHXM_PLAYER_SHOW_DECOY_MARKER"]   = "Show/Hide Decoy marker?"
 
@@ -762,8 +763,15 @@ L["PHXM_ADMIN_PROXIMITY_DISTANCE"]		= "Trigger distance in units (~160 = 10ft, ~
 L["PHXM_ADMIN_PROXIMITY_COOLDOWN"]		= "Cooldown between panic taunts (seconds)"
 
 L["PHXM_ADMIN_SMOKE_TITLE"]				= "Smoke Screen Settings"
-L["PHXM_ADMIN_SMOKE_ENABLED"]			= "[Experimental] Allow props to deploy a smoke screen (once per life, key: 2)"
+L["PHXM_ADMIN_SMOKE_ENABLED"]			= "[Experimental] Allow props to deploy smoke screens (key: 2)"
 L["PHXM_ADMIN_SMOKE_DURATION"]			= "Smoke duration (seconds)"
+L["PHXM_ADMIN_SMOKE_COUNT"]				= "Number of smoke grenades per life"
+
+L["PHXM_ADMIN_FLASHBANG_TITLE"]			= "Flashbang Settings"
+L["PHXM_ADMIN_FLASHBANG_ENABLED"]		= "[Experimental] Allow props to deploy flashbangs (stuns hunters, triggers taunt, key: 3)"
+L["PHXM_ADMIN_FLASHBANG_COUNT"]			= "Number of flashbangs per life"
+L["PHXM_ADMIN_FLASHBANG_STUN"]			= "Stun duration for hunters (seconds)"
+L["PHXM_ADMIN_FLASHBANG_RADIUS"]		= "Flashbang effect radius (units)"
 
 L["PHXM_ADMIN_FALLDMG"]			= "Enable Fall Damage (Applies on All Teams)"
 L["PHXM_ADMIN_FALLDMG_REAL"]		= "Enable 'Realistic' Fall Damage"

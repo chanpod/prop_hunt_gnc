@@ -165,9 +165,15 @@ function Player:GetDecoyCount()
 	return count
 end
 
--- Check if player can place more decoys (max 15)
+-- Check if player can place more decoys
 function Player:CanPlaceDecoy()
-	return self:GetDecoyCount() < 15
+	local maxDecoys = PHX:GetCVar("ph_decoy_max_count") or 5
+	return self:GetDecoyCount() < maxDecoys
+end
+
+-- Get max decoy count
+function Player:GetMaxDecoyCount()
+	return PHX:GetCVar("ph_decoy_max_count") or 5
 end
 
 function Player:HasPropPitchRotAllowed()
@@ -355,13 +361,13 @@ if SERVER then
 					self:SendSurfaceSound('buttons/lever4.wav')
 				end)
 
-				local remaining = 15 - self:GetDecoyCount()
+				local remaining = self:GetMaxDecoyCount() - self:GetDecoyCount()
 				self:PHXChatInfo( "PRIMARY", "Decoy placed! (" .. remaining .. " remaining)" )
 			else
 				self:PHXChatInfo( "WARNING", "DECOY_CANT_PUT_HERE" )
 			end
 		elseif not self:CanPlaceDecoy() then
-			self:PHXChatInfo( "WARNING", "Maximum decoys reached (15)!" )
+			self:PHXChatInfo( "WARNING", "Maximum decoys reached (" .. self:GetMaxDecoyCount() .. ")!" )
 		end
 	end
 
@@ -382,7 +388,7 @@ if SERVER then
 		self:PHXChatInfo( "PRIMARY", "Decoy removed." )
 	end
 
-	-- Deploy smoke screen (once per life)
+	-- Deploy smoke screen
 	function Player:DeploySmokeScreen()
 		if not PHX:GetCVar("ph_exp_smoke_enabled") then
 			return
@@ -392,14 +398,15 @@ if SERVER then
 			return
 		end
 
-		if self.ph_smoke_used then
-			self:PHXChatInfo("WARNING", "Smoke already used this life!")
+		local remaining = self.ph_smoke_count or 0
+		if remaining <= 0 then
+			self:PHXChatInfo("WARNING", "No smoke grenades remaining!")
 			return
 		end
 
-		-- Mark smoke as used
-		self.ph_smoke_used = true
-		self:SetNWBool("SmokeUsed", true)
+		-- Decrement smoke count
+		self.ph_smoke_count = remaining - 1
+		self:SetNWInt("SmokeCount", self.ph_smoke_count)
 
 		-- Get smoke duration from ConVar
 		local duration = PHX:GetCVar("ph_exp_smoke_duration") or 5
@@ -411,12 +418,158 @@ if SERVER then
 		effectData:SetEntity(self)
 		util.Effect("phx_smoke_screen", effectData, true, true)
 
-		self:PHXChatInfo("PRIMARY", "Smoke deployed!")
+		if self.ph_smoke_count > 0 then
+			self:PHXChatInfo("PRIMARY", "Smoke deployed! " .. self.ph_smoke_count .. " remaining.")
+		else
+			self:PHXChatInfo("PRIMARY", "Smoke deployed! No smokes remaining.")
+		end
 	end
 
 	-- Check if player has smoke available
 	function Player:HasSmokeAvailable()
-		return not self.ph_smoke_used
+		return (self.ph_smoke_count or 0) > 0
+	end
+
+	-- Get remaining smoke count
+	function Player:GetSmokeCount()
+		return self.ph_smoke_count or 0
+	end
+
+	-- Reset smoke count (called on spawn)
+	function Player:ResetSmokeCount()
+		self.ph_smoke_count = PHX:GetCVar("ph_exp_smoke_count") or 1
+		self:SetNWInt("SmokeCount", self.ph_smoke_count)
+	end
+
+	-- Deploy flashbang (stuns hunters, triggers forced taunt)
+	function Player:DeployFlashbang()
+		if not PHX:GetCVar("ph_exp_flashbang_enabled") then
+			return
+		end
+
+		if not self:Alive() or self:Team() ~= TEAM_PROPS then
+			return
+		end
+
+		local remaining = self.ph_flashbang_count or 0
+		if remaining <= 0 then
+			self:PHXChatInfo("WARNING", "No flashbangs remaining!")
+			return
+		end
+
+		-- Decrement flashbang count
+		self.ph_flashbang_count = remaining - 1
+		self:SetNWInt("FlashbangCount", self.ph_flashbang_count)
+
+		-- Get flashbang parameters
+		local radius = PHX:GetCVar("ph_exp_flashbang_radius") or 300
+		local stunDuration = PHX:GetCVar("ph_exp_flashbang_stun_duration") or 3
+
+		-- Create flashbang effect at player position
+		local effectData = EffectData()
+		effectData:SetOrigin(self:GetPos())
+		effectData:SetRadius(radius)
+		effectData:SetMagnitude(stunDuration)
+		effectData:SetEntity(self)
+		util.Effect("phx_flashbang", effectData, true, true)
+
+		-- Server-side: stun hunters and trigger forced taunt
+		if SERVER then
+			self:FlashbangStunHunters(radius, stunDuration)
+			self:FlashbangTriggerTaunt()
+		end
+
+		if self.ph_flashbang_count > 0 then
+			self:PHXChatInfo("PRIMARY", "Flashbang deployed! " .. self.ph_flashbang_count .. " remaining.")
+		else
+			self:PHXChatInfo("PRIMARY", "Flashbang deployed! No flashbangs remaining.")
+		end
+	end
+
+	-- Check if player has flashbang available
+	function Player:HasFlashbangAvailable()
+		return (self.ph_flashbang_count or 0) > 0
+	end
+
+	-- Get remaining flashbang count
+	function Player:GetFlashbangCount()
+		return self.ph_flashbang_count or 0
+	end
+
+	-- Reset flashbang count (called on spawn)
+	function Player:ResetFlashbangCount()
+		self.ph_flashbang_count = PHX:GetCVar("ph_exp_flashbang_count") or 1
+		self:SetNWInt("FlashbangCount", self.ph_flashbang_count)
+	end
+
+	-- Server-side: Stun hunters within radius
+	function Player:FlashbangStunHunters(radius, duration)
+		if not SERVER then return end
+
+		local propPos = self:GetPos()
+		for _, hunter in ipairs(team.GetPlayers(TEAM_HUNTERS)) do
+			if IsValid(hunter) and hunter:Alive() then
+				local dist = hunter:GetPos():Distance(propPos)
+				if dist <= radius then
+					-- Apply stun effect to hunter
+					hunter:ScreenFade(SCREENFADE.IN, Color(255, 255, 255, 255), 0.5, duration)
+					hunter:SetNWBool("PHX_Stunned", true)
+					hunter:SetNWFloat("PHX_StunEnd", CurTime() + duration)
+
+					-- Slow hunter movement during stun
+					local originalSpeed = hunter:GetWalkSpeed()
+					local originalRunSpeed = hunter:GetRunSpeed()
+					hunter:SetWalkSpeed(originalSpeed * 0.3)
+					hunter:SetRunSpeed(originalRunSpeed * 0.3)
+
+					-- Create timer to restore speed
+					timer.Create("PHX_FlashbangStun_" .. hunter:SteamID(), duration, 1, function()
+						if IsValid(hunter) then
+							hunter:SetWalkSpeed(originalSpeed)
+							hunter:SetRunSpeed(originalRunSpeed)
+							hunter:SetNWBool("PHX_Stunned", false)
+						end
+					end)
+
+					hunter:ChatPrint("[Prop Hunt] You've been flashbanged!")
+				end
+			end
+		end
+	end
+
+	-- Server-side: Trigger forced long taunt
+	function Player:FlashbangTriggerTaunt()
+		if not SERVER then return end
+
+		local minDuration = PHX:GetCVar("ph_exp_flashbang_taunt_min_duration") or 5
+		local taunts = PHX.CachedTaunts[TEAM_PROPS]
+
+		if not taunts or table.IsEmpty(taunts) then return end
+
+		-- Find taunts meeting duration requirement
+		local validTaunts = {}
+		for _, taunt in pairs(taunts) do
+			local duration = PHX:SoundDuration(taunt)
+			if duration and duration >= minDuration then
+				table.insert(validTaunts, taunt)
+			end
+		end
+
+		-- Fall back to any taunt if none meet requirement
+		local selectedTaunt
+		if #validTaunts > 0 then
+			selectedTaunt = table.Random(validTaunts)
+		else
+			selectedTaunt = table.Random(taunts)
+		end
+
+		if selectedTaunt then
+			local pitchRandEnabled = self:GetInfoNum("ph_cl_pitch_apply_random", 0)
+			local pitchlevel = self:GetInfoNum("ph_cl_pitch_level", 100)
+			local isRandomized = self:GetInfoNum("ph_cl_pitch_randomized_random", 0)
+
+			PHX:PlayTaunt(self, selectedTaunt, pitchRandEnabled, pitchlevel, isRandomized, "LastTauntTime")
+		end
 	end
 
 	function Player:SendSurfaceSound( strSnd )

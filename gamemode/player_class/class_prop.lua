@@ -39,13 +39,15 @@ function CLASS:OnSpawn(pl)
     -- Create Prop Entity
     pl:CreatePlayerPropEntity()
 
-	-- Initialize multi-decoy system (max 15 decoys)
+	-- Initialize multi-decoy system
 	pl.propdecoys = {}
 	pl:SetNWInt("DecoyCount", 0)
 
-	-- Reset smoke availability
-	pl.ph_smoke_used = false
-	pl:SetNWBool("SmokeUsed", false)
+	-- Reset smoke count
+	pl:ResetSmokeCount()
+
+	-- Reset flashbang count
+	pl:ResetFlashbangCount()
 
 	-- Do not allow Pitch Rotation until the prop is changing to a new prop.
 	pl:EnablePropPitchRot( false )

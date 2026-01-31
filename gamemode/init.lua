@@ -1,5 +1,5 @@
 -- Force client to download workshop. Instead of sharing files.
-resource.AddWorkshop("2176546751")
+resource.AddWorkshop("3657566048") -- GNC Edition
 
 -- Send required file to clients
 AddCSLuaFile("sh_init.lua")
@@ -1330,6 +1330,7 @@ hook.Add("PlayerButtonDown", "PlayerButton_ControlTaunts", function(pl, key)
 	
 	local decoyKey		= pl:GetInfoNum("ph_cl_decoy_spawn_key", 0)			-- Used for spawning decoy
 	local smokeKey		= pl:GetInfoNum("ph_cl_smoke_key", 0)				-- Used for deploying smoke
+	local flashbangKey	= pl:GetInfoNum("ph_cl_flashbang_key", 0)			-- Used for deploying flashbang
 	local unstuckKey	= pl:GetInfoNum("ph_cl_unstuck_key", 0)				-- The Unstuck Key
 
 	local plTeam = pl:Team()
@@ -1425,9 +1426,14 @@ hook.Add("PlayerButtonDown", "PlayerButton_ControlTaunts", function(pl, key)
 				end
 			end
 
-			-- Deploy Smoke Screen (once per life)
+			-- Deploy Smoke Screen
 			if (key == smokeKey) then
 				pl:DeploySmokeScreen()
+			end
+
+			-- Deploy Flashbang (stuns hunters, triggers taunt)
+			if (key == flashbangKey) then
+				pl:DeployFlashbang()
 			end
 
 		-- Team Hunters

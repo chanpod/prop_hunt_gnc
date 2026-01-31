@@ -222,6 +222,7 @@ CVAR["ph_force_join_balanced_teams"]			=	{ CTYPE_BOOL, 	"0", CVAR_SERVER_ONLY, "
 
 CVAR["ph_enable_decoy_reward"]				=	{ CTYPE_BOOL,	"1", CVAR_SERVER_ONLY_NO_NOTIFY, "Enable a decoy reward? Reward will be given if any prop player is alive on every round ends." }
 CVAR["ph_decoy_health"]						=	{ CTYPE_NUMBER,	"10", CVAR_SERVER_ONLY_NO_NOTIFY, "How much health points does the decoy has. Default is 10.", { min = 1, max = 200 } }
+CVAR["ph_decoy_max_count"]					=	{ CTYPE_NUMBER,	"5", CVAR_SERVER_ONLY_NO_NOTIFY, "Maximum number of decoys a prop can place per life.", { min = 1, max = 15 } }
 CVAR["ph_props_disable_footstep"]           =   { CTYPE_BOOL,  "1", CVAR_SERVER_ONLY, "Toggle Mute player footstep for Prop players." }
 
 CVAR["ph_smggrenadecounts"]					=	{ CTYPE_NUMBER, "1", CVAR_SERVER_ONLY, "How many grenades for SMG1 served on spawn?", { min = 1, max = 10 } }
@@ -272,9 +273,17 @@ CVAR["ph_exp_proximity_panic_distance"]		=	{ CTYPE_NUMBER, "200", 	CVAR_SERVER_O
 CVAR["ph_exp_proximity_panic_cooldown"]		=	{ CTYPE_NUMBER, "10", 	CVAR_SERVER_ONLY_NO_NOTIFY, "Cooldown (seconds) between proximity panic taunts.", { min = 3, max = 60 } }
 CVAR["ph_exp_proximity_panic_sound"]		=	{ CTYPE_STRING, "taunts/props/nein.wav", CVAR_SERVER_ONLY_NO_NOTIFY, "Sound file to play for proximity panic." }
 
--- GNC: Smoke Screen - props can deploy smoke once per life
-CVAR["ph_exp_smoke_enabled"]				=	{ CTYPE_BOOL, 	"0", 	CVAR_SERVER_ONLY_NO_NOTIFY, "[Experimental] Allow props to deploy a smoke screen once per life." }
+-- GNC: Smoke Screen - props can deploy smoke
+CVAR["ph_exp_smoke_enabled"]				=	{ CTYPE_BOOL, 	"0", 	CVAR_SERVER_ONLY_NO_NOTIFY, "[Experimental] Allow props to deploy a smoke screen." }
 CVAR["ph_exp_smoke_duration"]				=	{ CTYPE_NUMBER, "5", 	CVAR_SERVER_ONLY_NO_NOTIFY, "How long smoke lasts (seconds).", { min = 1, max = 15 } }
+CVAR["ph_exp_smoke_count"]					=	{ CTYPE_NUMBER, "1", 	CVAR_SERVER_ONLY_NO_NOTIFY, "Number of smoke grenades per life.", { min = 1, max = 5 } }
+
+-- GNC: Flashbang - props can deploy flashbang to stun hunters (triggers forced taunt)
+CVAR["ph_exp_flashbang_enabled"]			=	{ CTYPE_BOOL, 	"0", 	CVAR_SERVER_ONLY_NO_NOTIFY, "[Experimental] Allow props to deploy flashbangs that stun hunters." }
+CVAR["ph_exp_flashbang_count"]				=	{ CTYPE_NUMBER, "1", 	CVAR_SERVER_ONLY_NO_NOTIFY, "Number of flashbangs per life.", { min = 1, max = 5 } }
+CVAR["ph_exp_flashbang_stun_duration"]		=	{ CTYPE_NUMBER, "3", 	CVAR_SERVER_ONLY_NO_NOTIFY, "How long hunters are stunned (seconds).", { min = 1, max = 10 } }
+CVAR["ph_exp_flashbang_radius"]				=	{ CTYPE_NUMBER, "300", 	CVAR_SERVER_ONLY_NO_NOTIFY, "Flashbang effect radius (units).", { min = 100, max = 500 } }
+CVAR["ph_exp_flashbang_taunt_min_duration"]	=	{ CTYPE_NUMBER, "5", 	CVAR_SERVER_ONLY_NO_NOTIFY, "Minimum taunt duration triggered by flashbang (seconds).", { min = 3, max = 15 } }
 
 CVAR["ph_enable_thirdperson"]               =   { CTYPE_BOOL,   "1", 	CVAR_SERVER_ONLY, "Enable thirdperson mode for hunters." }
 CVAR["ph_sv_thirdperson_desired"]           =   { CTYPE_BOOL,   "0", 	CVAR_SERVER_ONLY, "Allow thirdperson mode to use Server's Desired Camera position (Disallow player custom position)" }
@@ -451,6 +460,7 @@ if CLIENT then
     CLCVAR["ph_cl_decoy_spawn_helper"]      =   { CTYPE_BOOL,   "1",     true, false, "Show/Hide a Decoy placement helper? This will show a white dot with a text near on your crosshair." }
     CLCVAR["ph_cl_decoy_spawn_marker"]      =   { CTYPE_BOOL,   "1",     true, false, "Show/Hide Decoy marker?" }
     CLCVAR["ph_cl_smoke_key"]               =   { CTYPE_NUMBER, KEY_2,   true, true,  "Key to deploy smoke screen. Default is Key number 2 ("..tostring(KEY_2)..")" }
+    CLCVAR["ph_cl_flashbang_key"]           =   { CTYPE_NUMBER, KEY_3,   true, true,  "Key to deploy flashbang. Default is Key number 3 ("..tostring(KEY_3)..")" }
 
     CLCVAR["ph_thirdperson_key"]            =   { CTYPE_NUMBER, KEY_N,   true, true, "Key for Third Person Mode. Only works for Hunters." }
     CLCVAR["ph_tpcam_dist"]                 =   { CTYPE_NUMBER, "64",      true, true, "Forward distance for thirdperson camera.", { min=32, max = 128 } }
