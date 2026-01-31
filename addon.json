@@ -1,0 +1,11 @@
+{
+	"title": "Prop Hunt: GNC Edition",
+	"type": "gamemode",
+	"tags": ["fun", "pvp", "realism"],
+	"ignore": [
+		".git",
+		".gitignore",
+		"*.psd",
+		"*.xcf"
+	]
+}
