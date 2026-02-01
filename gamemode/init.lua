@@ -16,6 +16,7 @@ AddCSLuaFile("cl_menuadmacc.lua")
 AddCSLuaFile("cl_autotaunt.lua")
 AddCSLuaFile("cl_credits.lua")
 AddCSLuaFile("cl_readyup.lua")
+AddCSLuaFile("cl_vertical_audio.lua")
 
 -- Include the required lua files
 include("sv_nettables.lua")
@@ -537,23 +538,35 @@ hook.Add("PostCleanupMap", "PH_ResetStats", function()
 	-- Force close any taunt menu windows
 	ControlTauntWindow(0)
 	PHX.VOICE_IS_END_ROUND = 0
-	
-	-- Called every round restart: make sure this was set publicly and make it synced accross clients.
-	SetGlobalInt("unBlind_Time", math.Clamp(PHX:GetCVar( "ph_hunter_blindlock_time" ) - (CurTime() - GetGlobalFloat("RoundStartTime", 0)), 0, PHX:GetCVar( "ph_hunter_blindlock_time" )) )
-    PHX:SetBlindStatus(true)
-	
-	local cvarPercent	= PHX:GetCVar( "ph_blindtime_respawn_percent" )
-	local blindTime		= GetGlobalInt("unBlind_Time", 0)
-	local percent		= blindTime * cvarPercent
-	phx_blind_unlocktime = CurTime() + percent
-	
-    -- Call a hook/set global state that Blind Time is over.
-	timer.Create("tmr_handleUnblindHook", blindTime, 1, function()
-        PHX:SetBlindStatus(false)
+
+	-- Dev mode: skip blind phase when solo hunter is enabled and only 1 player
+	local skipBlind = PHX:GetCVar("ph_dev_solo_hunter") and player.GetCount() == 1
+
+	if skipBlind then
+		-- No blind time for solo hunter dev mode
+		SetGlobalInt("unBlind_Time", 0)
+		PHX:SetBlindStatus(false)
+		phx_blind_unlocktime = 0
 		hook.Call("PH_BlindTimeOver", nil)
 		ClearBlindedHuntersList()
-	end)
-    
+	else
+		-- Called every round restart: make sure this was set publicly and make it synced accross clients.
+		SetGlobalInt("unBlind_Time", math.Clamp(PHX:GetCVar( "ph_hunter_blindlock_time" ) - (CurTime() - GetGlobalFloat("RoundStartTime", 0)), 0, PHX:GetCVar( "ph_hunter_blindlock_time" )) )
+		PHX:SetBlindStatus(true)
+
+		local cvarPercent	= PHX:GetCVar( "ph_blindtime_respawn_percent" )
+		local blindTime		= GetGlobalInt("unBlind_Time", 0)
+		local percent		= blindTime * cvarPercent
+		phx_blind_unlocktime = CurTime() + percent
+
+		-- Call a hook/set global state that Blind Time is over.
+		timer.Create("tmr_handleUnblindHook", blindTime, 1, function()
+			PHX:SetBlindStatus(false)
+			hook.Call("PH_BlindTimeOver", nil)
+			ClearBlindedHuntersList()
+		end)
+	end
+
 end)
 
 -- Check if HLA Playermodels exists.
@@ -925,7 +938,13 @@ hook.Add("PlayerSpawn", "PH_PlayerSpawn", function(pl)
     -- Reset Fake taunts
 	pl:ResetTauntRandMapCount()
 	
-	pl:SetLastTauntTime( "LastTauntTime", CurTime() )
+	-- GNC: Add random offset for props to desync auto-taunts
+	local tauntStartTime = CurTime()
+	if pl:Team() == TEAM_PROPS and PHX:GetCVar("ph_exp_taunt_offset_enabled") then
+		local maxOffset = PHX:GetCVar("ph_exp_taunt_offset_max") or 20
+		tauntStartTime = tauntStartTime - math.random(0, maxOffset)
+	end
+	pl:SetLastTauntTime( "LastTauntTime", tauntStartTime )
 	pl:SetLastTauntTime( "CLastTauntTime", CurTime() )
     pl.propdecoy = nil -- don't link to your decoy prop
     pl.propdecoys = {} -- reset multi-decoy table

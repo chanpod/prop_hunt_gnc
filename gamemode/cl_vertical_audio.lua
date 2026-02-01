@@ -1,5 +1,5 @@
 -- GNC: Vertical Audio - Client-side processing for position-based taunt audio
--- Sounds from above are higher pitched/softer, sounds from below are lower pitched/softer
+-- Sounds from above are higher pitched, sounds from below are lower pitched
 
 net.Receive("PHX.VerticalTaunt", function()
 	local sourceEnt = net.ReadEntity()
@@ -11,27 +11,31 @@ net.Receive("PHX.VerticalTaunt", function()
 	local listener = LocalPlayer()
 	if not IsValid(listener) then return end
 
-	local listenerPos = listener:EyePos()
+	local listenerPos = listener:GetPos()  -- Use feet position for consistent floor-to-floor comparison
 	local verticalDiff = sourcePos.z - listenerPos.z  -- positive = above, negative = below
 
-	-- Get configuration values
-	local pitchScale = PHX:GetCVar("ph_exp_vertical_audio_pitch_scale") or 0.1
-	local maxOffset = PHX:GetCVar("ph_exp_vertical_audio_max_offset") or 30
-	local volumeScale = PHX:GetCVar("ph_exp_vertical_audio_volume_scale") or 0.3
+	-- Get configuration values (use GetConVar directly for reliable sync)
+	local pitchScaleCV = GetConVar("ph_exp_vertical_audio_pitch_scale")
+	local maxOffsetCV = GetConVar("ph_exp_vertical_audio_max_offset")
+	local distanceThresholdCV = GetConVar("ph_exp_vertical_audio_distance")
 
-	-- Calculate pitch offset (above = higher pitch, below = lower pitch)
-	-- pitchScale of 0.1 means ±10 pitch per 100 vertical units
-	local pitchOffset = math.Clamp((verticalDiff / 100) * (pitchScale * 100), -maxOffset, maxOffset)
-	local finalPitch = math.Clamp(basePitch + pitchOffset, 50, 200)
+	local pitchScale = pitchScaleCV and pitchScaleCV:GetFloat() or 0.10
+	local maxOffset = maxOffsetCV and maxOffsetCV:GetInt() or 25
+	local distanceThreshold = distanceThresholdCV and distanceThresholdCV:GetInt() or 100
 
-	-- Calculate volume reduction (farther vertically = softer)
-	-- volumeScale of 0.3 means 30% reduction at 500 units vertical distance
+	-- Only apply pitch change if vertical distance exceeds threshold
 	local verticalAbs = math.abs(verticalDiff)
-	local volumeMult = math.max(0.3, 1 - (verticalAbs / 500) * volumeScale)
+	local finalPitch = basePitch
 
-	-- Play sound from source entity with modified parameters
-	-- EmitSound signature: soundName, soundLevel, pitchPercent, volume, channel
+	if verticalAbs >= distanceThreshold then
+		-- Calculate pitch offset (above = higher pitch, below = lower pitch)
+		-- pitchScale of 0.1 means ±10 pitch per 100 vertical units
+		local pitchOffset = math.Clamp((verticalDiff / 100) * (pitchScale * 100), -maxOffset, maxOffset)
+		finalPitch = math.Clamp(basePitch + pitchOffset, 50, 200)
+	end
+
+	-- Play sound from source entity with modified pitch
 	if IsValid(sourceEnt) then
-		sourceEnt:EmitSound(soundPath, baseLevel, finalPitch, volumeMult)
+		sourceEnt:EmitSound(soundPath, baseLevel, finalPitch)
 	end
 end)

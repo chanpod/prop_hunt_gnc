@@ -851,9 +851,20 @@ function PHX.UI.BaseMainMenu(ply, cmd, args)
 		PHX.UI:CreateVGUIType("","spacer",nil,grid,"" )
 		PHX.UI:CreateVGUIType("", "label", "PHX.MenuCategoryLabel", grid, "PHXM_ADMIN_VERTICAL_AUDIO_TITLE")
 		PHX.UI:CreateVGUIType("ph_exp_vertical_audio_enabled", "check", "SERVER", grid, "PHXM_ADMIN_VERTICAL_AUDIO_ENABLED")
-		PHX.UI:CreateVGUIType("ph_exp_vertical_audio_pitch_scale", "slider", {min = 0, max = 0.5, init = GetConVar("ph_exp_vertical_audio_pitch_scale"):GetFloat(), dec = 2, kind = "SERVER"}, grid, "PHXM_ADMIN_VERTICAL_AUDIO_PITCH")
-		PHX.UI:CreateVGUIType("ph_exp_vertical_audio_volume_scale", "slider", {min = 0, max = 1, init = GetConVar("ph_exp_vertical_audio_volume_scale"):GetFloat(), dec = 2, kind = "SERVER"}, grid, "PHXM_ADMIN_VERTICAL_AUDIO_VOLUME")
+		PHX.UI:CreateVGUIType("ph_exp_vertical_audio_pitch_scale", "slider", {min = 0, max = 0.5, init = GetConVar("ph_exp_vertical_audio_pitch_scale"):GetFloat(), dec = 2, float = true, kind = "SERVER"}, grid, "PHXM_ADMIN_VERTICAL_AUDIO_PITCH")
 		PHX.UI:CreateVGUIType("ph_exp_vertical_audio_max_offset", "slider", {min = 0, max = 50, init = GetConVar("ph_exp_vertical_audio_max_offset"):GetInt(), dec = 0, kind = "SERVER"}, grid, "PHXM_ADMIN_VERTICAL_AUDIO_MAXOFF")
+		PHX.UI:CreateVGUIType("ph_exp_vertical_audio_distance", "slider", {min = 10, max = 2000, init = GetConVar("ph_exp_vertical_audio_distance"):GetInt(), dec = 0, kind = "SERVER"}, grid, "PHXM_ADMIN_VERTICAL_AUDIO_DIST")
+
+		PHX.UI:CreateVGUIType("","spacer",nil,grid,"" )
+		PHX.UI:CreateVGUIType("", "label", "PHX.MenuCategoryLabel", grid, "PHXM_ADMIN_TAUNT_OFFSET_TITLE")
+		PHX.UI:CreateVGUIType("ph_exp_taunt_offset_enabled", "check", "SERVER", grid, "PHXM_ADMIN_TAUNT_OFFSET_ENABLED")
+		PHX.UI:CreateVGUIType("ph_exp_taunt_offset_max", "slider", {min = 5, max = 45, init = GetConVar("ph_exp_taunt_offset_max"):GetInt(), dec = 0, kind = "SERVER"}, grid, "PHXM_ADMIN_TAUNT_OFFSET_MAX")
+
+		PHX.UI:CreateVGUIType("","spacer",nil,grid,"" )
+		PHX.UI:CreateVGUIType("", "label", "PHX.MenuCategoryLabel", grid, "PHXM_ADMIN_DEV_TOOLS")
+		PHX.UI:CreateVGUIType("ph_dev_solo_hunter", "check", "SERVER", grid, "PHXM_ADMIN_DEV_SOLO_HUNTER")
+		PHX.UI:CreateVGUIType("ph_dev_radio_interval", "slider", {min = 1, max = 60, init = GetConVar("ph_dev_radio_interval"):GetInt(), dec = 0, kind = "SERVER"}, grid, "PHXM_ADMIN_DEV_RADIO_INTERVAL")
+		PHX.UI:CreateVGUIType("", "label", false, grid, "PHXM_ADMIN_DEV_RADIO_HINT")
 
 		PHX.UI:CreateVGUIType("","spacer",nil,grid,"" )
 

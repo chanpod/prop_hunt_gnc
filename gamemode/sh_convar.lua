@@ -287,9 +287,18 @@ CVAR["ph_exp_flashbang_taunt_min_duration"]	=	{ CTYPE_NUMBER, "5", 	CVAR_SERVER_
 
 -- GNC: Vertical Audio - taunts sound different based on vertical position
 CVAR["ph_exp_vertical_audio_enabled"]		=	{ CTYPE_BOOL, 	"0", 	CVAR_SERVER_ONLY_NO_NOTIFY, "[Experimental] Taunts sound different based on vertical position (above = higher pitch, below = lower)." }
-CVAR["ph_exp_vertical_audio_pitch_scale"]	=	{ CTYPE_FLOAT, 	"0.1", 	CVAR_SERVER_ONLY_NO_NOTIFY, "Pitch change per 100 vertical units (0.1 = ±10 pitch per 100 units).", { min = 0, max = 0.5 } }
-CVAR["ph_exp_vertical_audio_volume_scale"]	=	{ CTYPE_FLOAT, 	"0.3", 	CVAR_SERVER_ONLY_NO_NOTIFY, "Volume reduction multiplier for vertical distance.", { min = 0, max = 1 } }
-CVAR["ph_exp_vertical_audio_max_offset"]	=	{ CTYPE_NUMBER, "30", 	CVAR_SERVER_ONLY_NO_NOTIFY, "Maximum pitch offset allowed (pitch ranges 70-130 with default 30).", { min = 0, max = 50 } }
+CVAR["ph_exp_vertical_audio_pitch_scale"]	=	{ CTYPE_FLOAT, 	"0.10", CVAR_SERVER_ONLY_NO_NOTIFY, "Pitch change per 100 vertical units (0.1 = ±10 pitch per 100 units).", { min = 0, max = 0.5 } }
+CVAR["ph_exp_vertical_audio_max_offset"]	=	{ CTYPE_NUMBER, "25", 	CVAR_SERVER_ONLY_NO_NOTIFY, "Maximum pitch offset allowed (pitch ranges 75-125 with default 25).", { min = 0, max = 50 } }
+CVAR["ph_exp_vertical_audio_distance"]		=	{ CTYPE_NUMBER, "100", 	CVAR_SERVER_ONLY_NO_NOTIFY, "Vertical distance threshold (effect only applies beyond this).", { min = 10, max = 2000 } }
+
+-- GNC: Taunt Offset - desync prop auto-taunts so they don't all play at once
+CVAR["ph_exp_taunt_offset_enabled"]			=	{ CTYPE_BOOL, 	"1", 	CVAR_SERVER_ONLY_NO_NOTIFY, "Add random offset to prop auto-taunt timers to desync them." }
+CVAR["ph_exp_taunt_offset_max"]				=	{ CTYPE_NUMBER, "20", 	CVAR_SERVER_ONLY_NO_NOTIFY, "Maximum random offset in seconds (0-N added to each prop's timer).", { min = 5, max = 45 } }
+
+-- GNC: Developer/Testing Features
+CVAR["ph_dev_solo_hunter"]					=	{ CTYPE_BOOL, 	"0", 	CVAR_SERVER_ONLY_NO_NOTIFY, "[Dev] Allow being a hunter when only 1 player is present." }
+CVAR["ph_dev_radio_interval"]				=	{ CTYPE_NUMBER, "10", 	CVAR_SERVER_ONLY_NO_NOTIFY, "[Dev] Test radio taunt interval in seconds.", { min = 1, max = 60 } }
+CVAR["ph_dev_radio_sound"]					=	{ CTYPE_STRING, "taunts/props/leroy_jenkins.wav", CVAR_SERVER_ONLY_NO_NOTIFY, "[Dev] Sound file for test radio." }
 
 CVAR["ph_enable_thirdperson"]               =   { CTYPE_BOOL,   "1", 	CVAR_SERVER_ONLY, "Enable thirdperson mode for hunters." }
 CVAR["ph_sv_thirdperson_desired"]           =   { CTYPE_BOOL,   "0", 	CVAR_SERVER_ONLY, "Allow thirdperson mode to use Server's Desired Camera position (Disallow player custom position)" }

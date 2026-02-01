@@ -777,8 +777,17 @@ L["PHXM_ADMIN_FLASHBANG_RADIUS"]		= "Flashbang effect radius (units)"
 L["PHXM_ADMIN_VERTICAL_AUDIO_TITLE"]	= "Vertical Audio Settings"
 L["PHXM_ADMIN_VERTICAL_AUDIO_ENABLED"]	= "[Experimental] Taunts sound different based on vertical position (above = higher pitch, below = lower)."
 L["PHXM_ADMIN_VERTICAL_AUDIO_PITCH"]	= "Pitch change per 100 vertical units (0.1 = ±10 pitch)"
-L["PHXM_ADMIN_VERTICAL_AUDIO_VOLUME"]	= "Volume reduction for vertical distance"
+
+L["PHXM_ADMIN_TAUNT_OFFSET_TITLE"]		= "Taunt Offset Settings"
+L["PHXM_ADMIN_TAUNT_OFFSET_ENABLED"]	= "Desync prop auto-taunts so they don't all play at the same time."
+L["PHXM_ADMIN_TAUNT_OFFSET_MAX"]		= "Maximum random offset (seconds) added to each prop's timer"
 L["PHXM_ADMIN_VERTICAL_AUDIO_MAXOFF"]	= "Maximum pitch offset (prevents extreme pitch)"
+L["PHXM_ADMIN_VERTICAL_AUDIO_DIST"]		= "Vertical distance threshold (effect only applies beyond this)"
+
+L["PHXM_ADMIN_DEV_TOOLS"]				= "Developer / Testing Tools"
+L["PHXM_ADMIN_DEV_SOLO_HUNTER"]			= "[Dev] Allow being a hunter when only 1 player is present."
+L["PHXM_ADMIN_DEV_RADIO_INTERVAL"]		= "Test radio taunt interval (seconds)"
+L["PHXM_ADMIN_DEV_RADIO_HINT"]			= "Console: ph_dev_spawn_radio (spawn) / ph_dev_remove_radios (cleanup)"
 
 L["PHXM_ADMIN_FALLDMG"]			= "Enable Fall Damage (Applies on All Teams)"
 L["PHXM_ADMIN_FALLDMG_REAL"]		= "Enable 'Realistic' Fall Damage"
