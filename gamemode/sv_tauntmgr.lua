@@ -61,6 +61,16 @@ local function GetTauntWithMinDuration(minDuration)
 	return table.Random(validTaunts)
 end
 
+-- GNC: Check if panic mode is active (round timer running low)
+local function IsPanicModeActive()
+	if !PHX:GetCVar("ph_autotaunt_panic_enabled") then return false end
+	local roundEndTime = GetGlobalFloat("RoundEndTime", 0)
+	if roundEndTime == 0 then return false end
+	local timeLeft = roundEndTime - CurTime()
+	local threshold = PHX:GetCVar("ph_autotaunt_panic_threshold") or 60
+	return timeLeft > 0 and timeLeft <= threshold
+end
+
 local function TauntTimeLeft(ply)
 	-- Always return 1 when the conditions are not met
 	if !IsValid(ply) || !ply:Alive() || ply:Team() != TEAM_PROPS then return 1; end
@@ -68,8 +78,11 @@ local function TauntTimeLeft(ply)
 	local lastTauntTime = ply:GetLastTauntTime( "LastTauntTime" )
 	local baseDelay = PHX:GetCVar( "ph_autotaunt_delay" )
 
-	-- GNC: Apply stationary delay multiplier if player is stationary
-	if IsPlayerStationary(ply) then
+	-- GNC: Panic mode takes priority - overrides everything
+	if IsPanicModeActive() then
+		baseDelay = PHX:GetCVar("ph_autotaunt_panic_delay") or 10
+	-- GNC: Apply stationary delay multiplier ONLY if NOT in panic mode
+	elseif IsPlayerStationary(ply) then
 		local mult = PHX:GetCVar("ph_exp_stationary_delay_mult") or 0.5
 		baseDelay = baseDelay * mult
 	end
@@ -92,9 +105,9 @@ local function AutoTauntThink()
 				local pitchlevel 		= ply:GetInfoNum( "ph_cl_pitch_level", 100 )
 				local isRandomized 		= ply:GetInfoNum( "ph_cl_pitch_randomized_random", 0 )
 
-				-- GNC: Select taunt based on stationary state
+				-- GNC: Select taunt based on stationary state (but NOT during panic mode)
 				local rand_taunt
-				if IsPlayerStationary(ply) then
+				if !IsPanicModeActive() and IsPlayerStationary(ply) then
 					local minDuration = PHX:GetCVar("ph_exp_stationary_min_duration") or 5
 					rand_taunt = GetTauntWithMinDuration(minDuration)
 				else

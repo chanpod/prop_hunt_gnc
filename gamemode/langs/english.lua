@@ -761,6 +761,7 @@ L["PHXM_ADMIN_PROXIMITY_PANIC"]			= "Proximity Panic Settings"
 L["PHXM_ADMIN_PROXIMITY_ENABLED"]		= "[Experimental] Auto-play panic sound when prop runs near a hunter."
 L["PHXM_ADMIN_PROXIMITY_DISTANCE"]		= "Trigger distance in units (~160 = 10ft, ~250 = 15ft)"
 L["PHXM_ADMIN_PROXIMITY_COOLDOWN"]		= "Cooldown between panic taunts (seconds)"
+L["PHXM_ADMIN_PROXIMITY_SOUND"]			= "Sound file path (e.g. taunts/props/nein.wav)"
 
 L["PHXM_ADMIN_SMOKE_TITLE"]				= "Smoke Screen Settings"
 L["PHXM_ADMIN_SMOKE_ENABLED"]			= "[Experimental] Allow props to deploy smoke screens (key: 2)"
@@ -772,6 +773,12 @@ L["PHXM_ADMIN_FLASHBANG_ENABLED"]		= "[Experimental] Allow props to deploy flash
 L["PHXM_ADMIN_FLASHBANG_COUNT"]			= "Number of flashbangs per life"
 L["PHXM_ADMIN_FLASHBANG_STUN"]			= "Stun duration for hunters (seconds)"
 L["PHXM_ADMIN_FLASHBANG_RADIUS"]		= "Flashbang effect radius (units)"
+
+L["PHXM_ADMIN_VERTICAL_AUDIO_TITLE"]	= "Vertical Audio Settings"
+L["PHXM_ADMIN_VERTICAL_AUDIO_ENABLED"]	= "[Experimental] Taunts sound different based on vertical position (above = higher pitch, below = lower)."
+L["PHXM_ADMIN_VERTICAL_AUDIO_PITCH"]	= "Pitch change per 100 vertical units (0.1 = ±10 pitch)"
+L["PHXM_ADMIN_VERTICAL_AUDIO_VOLUME"]	= "Volume reduction for vertical distance"
+L["PHXM_ADMIN_VERTICAL_AUDIO_MAXOFF"]	= "Maximum pitch offset (prevents extreme pitch)"
 
 L["PHXM_ADMIN_FALLDMG"]			= "Enable Fall Damage (Applies on All Teams)"
 L["PHXM_ADMIN_FALLDMG_REAL"]		= "Enable 'Realistic' Fall Damage"

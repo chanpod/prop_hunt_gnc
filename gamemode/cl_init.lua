@@ -34,6 +34,7 @@ include("cl_tauntwindow.lua")
 include("cl_autotaunt.lua")
 include("cl_credits.lua") -- Credits and Contributors message
 include("cl_readyup.lua") -- GNC: Ready-Up System
+include("cl_vertical_audio.lua") -- GNC: Vertical Audio
 
 -- /!\ Convars are now moved on sh_convars.lua.
 

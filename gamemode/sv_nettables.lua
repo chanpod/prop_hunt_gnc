@@ -54,7 +54,10 @@ local nets = {
 
 	-- GNC: Ready-Up System
 	"PHX.ReadyUp.Toggle",
-	"PHX.ReadyUp.StateUpdate"
+	"PHX.ReadyUp.StateUpdate",
+
+	-- GNC: Vertical Audio
+	"PHX.VerticalTaunt"
 }
 
 for _,init in pairs(nets) do

@@ -833,6 +833,7 @@ function PHX.UI.BaseMainMenu(ply, cmd, args)
 		PHX.UI:CreateVGUIType("ph_exp_proximity_panic_enabled", "check", "SERVER", grid, "PHXM_ADMIN_PROXIMITY_ENABLED")
 		PHX.UI:CreateVGUIType("ph_exp_proximity_panic_distance", "slider", {min = 50, max = 500, init = GetConVar("ph_exp_proximity_panic_distance"):GetInt(), dec = 0, kind = "SERVER"}, grid, "PHXM_ADMIN_PROXIMITY_DISTANCE")
 		PHX.UI:CreateVGUIType("ph_exp_proximity_panic_cooldown", "slider", {min = 3, max = 60, init = GetConVar("ph_exp_proximity_panic_cooldown"):GetInt(), dec = 0, kind = "SERVER"}, grid, "PHXM_ADMIN_PROXIMITY_COOLDOWN")
+		PHX.UI:CreateVGUIType("ph_exp_proximity_panic_sound", "textentry", "SERVER", grid, "PHXM_ADMIN_PROXIMITY_SOUND")
 
 		PHX.UI:CreateVGUIType("","spacer",nil,grid,"" )
 		PHX.UI:CreateVGUIType("", "label", "PHX.MenuCategoryLabel", grid, "PHXM_ADMIN_SMOKE_TITLE")
@@ -848,8 +849,15 @@ function PHX.UI.BaseMainMenu(ply, cmd, args)
 		PHX.UI:CreateVGUIType("ph_exp_flashbang_radius", "slider", {min = 100, max = 500, init = GetConVar("ph_exp_flashbang_radius"):GetInt(), dec = 0, kind = "SERVER"}, grid, "PHXM_ADMIN_FLASHBANG_RADIUS")
 
 		PHX.UI:CreateVGUIType("","spacer",nil,grid,"" )
-		
-		
+		PHX.UI:CreateVGUIType("", "label", "PHX.MenuCategoryLabel", grid, "PHXM_ADMIN_VERTICAL_AUDIO_TITLE")
+		PHX.UI:CreateVGUIType("ph_exp_vertical_audio_enabled", "check", "SERVER", grid, "PHXM_ADMIN_VERTICAL_AUDIO_ENABLED")
+		PHX.UI:CreateVGUIType("ph_exp_vertical_audio_pitch_scale", "slider", {min = 0, max = 0.5, init = GetConVar("ph_exp_vertical_audio_pitch_scale"):GetFloat(), dec = 2, kind = "SERVER"}, grid, "PHXM_ADMIN_VERTICAL_AUDIO_PITCH")
+		PHX.UI:CreateVGUIType("ph_exp_vertical_audio_volume_scale", "slider", {min = 0, max = 1, init = GetConVar("ph_exp_vertical_audio_volume_scale"):GetFloat(), dec = 2, kind = "SERVER"}, grid, "PHXM_ADMIN_VERTICAL_AUDIO_VOLUME")
+		PHX.UI:CreateVGUIType("ph_exp_vertical_audio_max_offset", "slider", {min = 0, max = 50, init = GetConVar("ph_exp_vertical_audio_max_offset"):GetInt(), dec = 0, kind = "SERVER"}, grid, "PHXM_ADMIN_VERTICAL_AUDIO_MAXOFF")
+
+		PHX.UI:CreateVGUIType("","spacer",nil,grid,"" )
+
+
 	local PanelModify = PHX.UI.PnlTab:AddSheet("", panel, "vgui/ph_iconmenu/m_admin.png")
 	PHX.UI.PaintTabButton(PanelModify, PHX:FTranslate("PHXM_TAB_ADMIN"))
 	

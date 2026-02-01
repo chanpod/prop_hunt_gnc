@@ -1301,14 +1301,27 @@ function PHX:PlayTaunt( pl, sndTaunt, bIsPitchEnabled, iPitchLevel, bIsRandomize
 		end
 		
 		local pitch = 100
-		if PHX:GetCVar( "ph_taunt_pitch_enable" ) and tobool( bIsPitchEnabled ) then		
+		if PHX:GetCVar( "ph_taunt_pitch_enable" ) and tobool( bIsPitchEnabled ) then
 			if tobool( bIsRandomized ) then
 				pitch = math.random( PHX:GetCVar("ph_taunt_pitch_range_min"), PHX:GetCVar("ph_taunt_pitch_range_max") )
 			else
 				pitch = math.Clamp( iPitchLevel, PHX:GetCVar("ph_taunt_pitch_range_min"), PHX:GetCVar("ph_taunt_pitch_range_max") )
 			end
 		end
-		pl:EmitSound( taunt, cvSndLevel, pitch )
+
+		-- GNC: Vertical Audio - send to clients for personalized processing
+		if PHX:GetCVar("ph_exp_vertical_audio_enabled") then
+			net.Start("PHX.VerticalTaunt")
+			net.WriteEntity(pl)
+			net.WriteString(taunt)
+			net.WriteUInt(cvSndLevel, 8)
+			net.WriteUInt(pitch, 8)
+			net.WriteVector(pl:GetPos())
+			net.Broadcast()
+		else
+			pl:EmitSound( taunt, cvSndLevel, pitch )
+		end
+
 		pl:SetLastTauntTime( LastTauntTimeID, CurTime() )
 		
 	end

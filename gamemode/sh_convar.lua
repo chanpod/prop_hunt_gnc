@@ -285,6 +285,12 @@ CVAR["ph_exp_flashbang_stun_duration"]		=	{ CTYPE_NUMBER, "3", 	CVAR_SERVER_ONLY
 CVAR["ph_exp_flashbang_radius"]				=	{ CTYPE_NUMBER, "300", 	CVAR_SERVER_ONLY_NO_NOTIFY, "Flashbang effect radius (units).", { min = 100, max = 500 } }
 CVAR["ph_exp_flashbang_taunt_min_duration"]	=	{ CTYPE_NUMBER, "5", 	CVAR_SERVER_ONLY_NO_NOTIFY, "Minimum taunt duration triggered by flashbang (seconds).", { min = 3, max = 15 } }
 
+-- GNC: Vertical Audio - taunts sound different based on vertical position
+CVAR["ph_exp_vertical_audio_enabled"]		=	{ CTYPE_BOOL, 	"0", 	CVAR_SERVER_ONLY_NO_NOTIFY, "[Experimental] Taunts sound different based on vertical position (above = higher pitch, below = lower)." }
+CVAR["ph_exp_vertical_audio_pitch_scale"]	=	{ CTYPE_FLOAT, 	"0.1", 	CVAR_SERVER_ONLY_NO_NOTIFY, "Pitch change per 100 vertical units (0.1 = ±10 pitch per 100 units).", { min = 0, max = 0.5 } }
+CVAR["ph_exp_vertical_audio_volume_scale"]	=	{ CTYPE_FLOAT, 	"0.3", 	CVAR_SERVER_ONLY_NO_NOTIFY, "Volume reduction multiplier for vertical distance.", { min = 0, max = 1 } }
+CVAR["ph_exp_vertical_audio_max_offset"]	=	{ CTYPE_NUMBER, "30", 	CVAR_SERVER_ONLY_NO_NOTIFY, "Maximum pitch offset allowed (pitch ranges 70-130 with default 30).", { min = 0, max = 50 } }
+
 CVAR["ph_enable_thirdperson"]               =   { CTYPE_BOOL,   "1", 	CVAR_SERVER_ONLY, "Enable thirdperson mode for hunters." }
 CVAR["ph_sv_thirdperson_desired"]           =   { CTYPE_BOOL,   "0", 	CVAR_SERVER_ONLY, "Allow thirdperson mode to use Server's Desired Camera position (Disallow player custom position)" }
 CVAR["ph_sv_thirdperson_ddist"]             =   { CTYPE_NUMBER, "64", 	CVAR_SERVER_ONLY_NO_NOTIFY, "Thirdperson: Desired Camera Distance.", { min=32, max = 128 } }
