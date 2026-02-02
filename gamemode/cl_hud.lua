@@ -337,7 +337,8 @@ hook.Add("HUDPaint", "PHX.PropAbilitiesHUD", function()
 	-- Decoy info
 	if PHX:GetCVar("ph_enable_decoy_reward") then
 		local decoyCount = ply:GetNWInt("DecoyCount", 0)
-		local remaining = 15 - decoyCount
+		local maxDecoys = PHX:GetCVar("ph_decoy_max_count") or 5
+		local remaining = maxDecoys - decoyCount
 		local decoyKey = input.GetKeyName(ply:GetInfoNum("ph_cl_decoy_spawn_key", KEY_1)) or "1"
 		table.insert(lines, {
 			key = decoyKey:upper(),
@@ -375,7 +376,7 @@ hook.Add("HUDPaint", "PHX.PropAbilitiesHUD", function()
 
 	local boxHeight = (#lines * lineHeight) + (padding * 2)
 	local boxX = ScrW() - boxWidth - 20
-	local boxY = ScrH() - boxHeight - 100
+	local boxY = ScrH() - boxHeight - 150  -- Moved up to avoid overlapping other HUD elements
 
 	-- Draw background
 	draw.RoundedBox(6, boxX, boxY, boxWidth, boxHeight, Color(20, 20, 20, 180))
